@@ -146,6 +146,7 @@ class Mode:
     experimental_string_processing: bool = False
     python_cell_magics: Set[str] = field(default_factory=set)
     preview: bool = False
+    indentation_size: int = 4
 
     def __post_init__(self) -> None:
         if self.experimental_string_processing:
@@ -183,6 +184,7 @@ class Mode:
             str(int(self.magic_trailing_comma)),
             str(int(self.experimental_string_processing)),
             str(int(self.preview)),
+            str(self.indentation_size),
             sha256((",".join(sorted(self.python_cell_magics))).encode()).hexdigest(),
         ]
         return ".".join(parts)

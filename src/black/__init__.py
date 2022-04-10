@@ -406,6 +406,14 @@ def validate_regex(
     callback=read_pyproject_toml,
     help="Read configuration from FILE path.",
 )
+@click.option(
+    "-I",
+    "--indentation-size",
+    type=click.INT,
+    default=4,
+    show_default=True,
+    help="Indentation size in number of spaces.",
+)
 @click.pass_context
 def main(  # noqa: C901
     ctx: click.Context,
@@ -434,6 +442,7 @@ def main(  # noqa: C901
     workers: int,
     src: Tuple[str, ...],
     config: Optional[str],
+    indentation_size: int,
 ) -> None:
     """The uncompromising code formatter."""
     ctx.ensure_object(dict)
@@ -446,6 +455,10 @@ def main(  # noqa: C901
         ctx.exit(1)
     if not src and code is None:
         out(main.get_usage(ctx) + "\n\nOne of 'SRC' or 'code' is required.")
+        ctx.exit(1)
+
+    if indentation_size not in (2, 4):
+        out(main.get_usage(ctx) + "\n\nIndentation size can only be equal to 2 or 4.")
         ctx.exit(1)
 
     root, method = find_project_root(src) if code is None else (None, None)
@@ -520,6 +533,7 @@ def main(  # noqa: C901
         experimental_string_processing=experimental_string_processing,
         preview=preview,
         python_cell_magics=set(python_cell_magics),
+        indentation_size=indentation_size,
     )
 
     if code is not None:

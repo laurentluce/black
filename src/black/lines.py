@@ -409,7 +409,18 @@ class Line:
         for comment in itertools.chain.from_iterable(self.comments.values()):
             res += str(comment)
 
-        return res + "\n"
+        res += "\n"
+
+        if self.mode.indentation_size == 2:
+            if res.startswith(" "):
+                no_left_spaces = res.lstrip(" ")
+                n_leading_spaces = len(res) - len(no_left_spaces)
+
+                # reindent by generating half the spaces
+                # (from 4-space blocks to 2-space blocks)
+                res = "%s%s" % (" " * (n_leading_spaces >> 1), no_left_spaces)
+
+        return res
 
     def __bool__(self) -> bool:
         """Return True if the line has leaves or comments."""

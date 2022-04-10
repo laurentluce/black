@@ -126,6 +126,10 @@ SOURCES: List[str] = [
     "tests/conftest.py",
 ]
 
+INDENTATION_SIZE_TWO_CASES: List[str] = [
+    "indentation_size_two",
+]
+
 
 @pytest.fixture(autouse=True)
 def patch_dump_to_file(request: Any) -> Iterator[None]:
@@ -152,6 +156,11 @@ def test_preview_format(filename: str) -> None:
 def test_source_is_formatted(filename: str) -> None:
     path = THIS_DIR.parent / filename
     check_file(str(path), DEFAULT_MODE, data=False)
+
+
+@pytest.mark.parametrize("filename", INDENTATION_SIZE_TWO_CASES)
+def test_indentation_size_two_format(filename: str) -> None:
+    check_file(filename, black.Mode(indentation_size=2))
 
 
 # =============== #
