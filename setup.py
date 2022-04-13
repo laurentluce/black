@@ -70,9 +70,17 @@ if USE_MYPYC:
 else:
     ext_modules = []
 
+
+def read_version(version: object) -> str:
+    with open(CURRENT_DIR / "VERSION") as f:
+        return f.readline().rstrip()
+
+
 setup(
     name="black",
     use_scm_version={
+        "version_scheme": read_version,
+        "local_scheme": "no-local-version",
         "write_to": "src/_black_version.py",
         "write_to_template": 'version = "{version}"\n',
     },
