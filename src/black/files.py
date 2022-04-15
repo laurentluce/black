@@ -22,11 +22,7 @@ from pathspec import PathSpec
 from pathspec.patterns.gitwildmatch import GitWildMatchPatternError
 
 if sys.version_info >= (3, 11):
-    try:
-        import tomllib
-    except ImportError:
-        # Help users on older alphas
-        import tomli as tomllib
+    import tomllib
 else:
     import tomli as tomllib
 
